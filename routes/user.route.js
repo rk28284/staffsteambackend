@@ -5,36 +5,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const userRouter = express.Router();
 
-
-// userRouter.post("/register", async (req, res) => {
-//   const payload = req.body;
-
-//   try {
-//     const ExistUser = await userModel.findOne({ email: payload.email });
-    
-//     if (ExistUser) {
-//       res.status(400).send({ msg: "User Already Register" });
-//       return
-//     }
-//     bcrypt.hash(payload.password, 4, async function (err, hash) {
-//       // Store hash in your password DB.
-//       const addData = new userModel({
-//         name: payload.name,
-//         email: payload.email,
-//         password: hash,
-//         phone: payload.phone,
-//       });
-//       await addData.save();
-//       res
-//         .status(200)
-//         .send({ msg: "UserData Has been Addded" }, { Data: addData });
-//     });
-//   } catch (error) {
-//     res.status(400).send({ msg: "Something Went Wrong" });
-//   }
-// });
-
-
 userRouter.post("/register",async(req,res)=>{
   const payload=req.body
  
@@ -61,32 +31,67 @@ userRouter.post("/register",async(req,res)=>{
       res.status(400).send({"msg":"Something Went wrong","error":error})
   }
 })
+
+// userRouter.post("/login", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     console.log(email,password);
+//     if (!email) {
+//       res.status(200).send({ msg: "Email Not  Found" });
+//     }
+//     if (!password) {
+      
+//       res.status(200).send({ msg: "Password Not  Found" });
+//     }
+//     const reqData = await userModel.find({ email });
+  
+//     if (reqData.length == 0) {
+//       res.status(200).send({ msg: "Please Register First" });
+//     } else {
+//       bcrypt.compare(password, hash, function (err, result) {
+//         // result == true
+//         if (result) {
+//           var token = jwt.sign({ foo: "bar" }, process.env.KEY);
+//           res.status(200).send({ msg: "Login Successfull", token: token });
+//         } else {
+//           res.status(400).send({ msg: "Something went wrong" });
+//         }
+//       });
+//     }
+//   } catch (error) {
+//     res.status(200).send({ msg: "Something not found" });
+//   }
+// });
+
+
 userRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const reqData = await userModel.find({ email });
+
     if (!email) {
-      res.status(200).send({ msg: "Email Not  Found" });
+    return  res.status(200).send({ msg: "Email Not  Found" });
     }
     if (!password) {
-      res.status(200).send({ msg: "Password Not  Found" });
+     return res.status(200).send({ msg: "Password Not  Found" });
     }
+    const reqData = await userModel.find({ email });
+console.log(reqData);
+const hashpassword=reqData[0].password
     if (reqData.length == 0) {
-      res.status(200).send({ msg: "Please Register First" });
+    return  res.status(200).send({ msg: "Please Register First" });
     } else {
-      bcrypt.compare(password, hash, function (err, result) {
-        // result == true
+      bcrypt.compare(password, hashpassword, function (err, result) {
         if (result) {
-          var token = jwt.sign({ foo: "bar" }, process.env.key);
-          res.status(200).send({ msg: "Login Successfull", token: token });
+          var token = jwt.sign({ foo: "bar" }, process.env.KEY);
+          return res.status(200).send({ msg: "Login Successfull", token: token });
         } else {
-          res.status(400).send({ msg: "Something went wrong" });
+      res.status(200).send({ msg:"Password not Match"});
+       return   res.status(400).send({ msg: "Something went wrong" });
         }
       });
     }
   } catch (error) {
-    res.status(200).send({ msg: "Something not found" });
+  return  res.status(200).send({ msg: "Something not found" });
   }
 });
-
 module.exports = userRouter;

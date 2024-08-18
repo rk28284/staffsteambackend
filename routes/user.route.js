@@ -32,37 +32,6 @@ userRouter.post("/register",async(req,res)=>{
   }
 })
 
-// userRouter.post("/login", async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-//     console.log(email,password);
-//     if (!email) {
-//       res.status(200).send({ msg: "Email Not  Found" });
-//     }
-//     if (!password) {
-      
-//       res.status(200).send({ msg: "Password Not  Found" });
-//     }
-//     const reqData = await userModel.find({ email });
-  
-//     if (reqData.length == 0) {
-//       res.status(200).send({ msg: "Please Register First" });
-//     } else {
-//       bcrypt.compare(password, hash, function (err, result) {
-//         // result == true
-//         if (result) {
-//           var token = jwt.sign({ foo: "bar" }, process.env.KEY);
-//           res.status(200).send({ msg: "Login Successfull", token: token });
-//         } else {
-//           res.status(400).send({ msg: "Something went wrong" });
-//         }
-//       });
-//     }
-//   } catch (error) {
-//     res.status(200).send({ msg: "Something not found" });
-//   }
-// });
-
 
 userRouter.post("/login", async (req, res) => {
   try {

@@ -15,6 +15,18 @@ emplpyeeRouter.get("/employee", async (req, res) => {
   }
 });
 
+emplpyeeRouter.get("/:id",async(req,res)=>{
+  const ID=req.params.id;
+  try {
+     const reqData=await employeemodel.find({_id:ID});
+     res.status(200).json({"msg":` Employee data of id ${ID}`,"data":reqData}) 
+  } catch (error) {
+      console.log("error while getting a paticular Employee data");
+      console.log(error);
+      res.json({"msg":"error while getting a paticular Employee data","error":error})
+  }
+})
+
 emplpyeeRouter.post("/addemployee", async (req, res) => {
   try {
     const resData = req.body;
@@ -27,6 +39,31 @@ emplpyeeRouter.post("/addemployee", async (req, res) => {
   }
 });
 
+emplpyeeRouter.delete("/:id",async(req,res)=>{
+  const ID=req.params.id;
+  
+   try {
+     const reqData=await employeemodel.findByIdAndDelete({_id:ID});
+     res.status(202).json({"msg":`Employee data of id ${ID} deleted successfully`}) 
+  } catch (error) {
+      console.log("error while deleteing Employee data");
+      console.log(error);
+      res.json({"msg":"error while deleteing Employee data","error":error})
+  }
+})
+
+emplpyeeRouter.patch("/:id",async(req,res)=>{
+  const ID=req.params.id;
+  const payload=req.body;
+  try {
+    const reqData= await employeemodel.findByIdAndUpdate({_id:ID},payload);
+     res.status(204).json({"msg":`Employee data of id ${ID} updated successfully`}) 
+  } catch (error) {
+      console.log("error while updating Employee data");
+      console.log(error);
+      res.json({"msg":"error while updating Employee data","error":error})
+  }
+})
 
 
 module.exports = emplpyeeRouter;

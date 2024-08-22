@@ -22,7 +22,7 @@ userRouter.post("/register",async(req,res)=>{
          name: payload.name,
         email: payload.email,
         password: hash,
-        phone: payload.phone,
+        avatar: payload.avatar,
       })
       await addData.save()
       res.status(200).send({"msg":"User Register Successfully"})

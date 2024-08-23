@@ -7,7 +7,7 @@ const userRouter = express.Router();
 
 userRouter.post("/register",async(req,res)=>{
   const payload=req.body
- 
+   console.log("hhhhhhhh",req.body)
   try {
      const reqData=await userModel.find({email:payload.email})
      if(reqData.length>0){
@@ -19,12 +19,14 @@ userRouter.post("/register",async(req,res)=>{
           res.status(200).send({"msg":"Something Error with bcrypt"})
       }
       const addData=await userModel({
-         name: payload.name,
+        username: payload.username,
         email: payload.email,
         password: hash,
         avatar: payload.avatar,
       })
-      await addData.save()
+      console.log("gggggggg",addData)
+     let store = await addData.save()
+     console.log("kkkkkkkk",store)
       res.status(200).send({"msg":"User Register Successfully"})
   });
   } catch (error) {
